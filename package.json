@@ -4,7 +4,8 @@
   "description": "webdriver script to automate registering for visitor parking",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js --harmony_async_await"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   },
   "homepage": "https://github.com/HNBowen/auto-park#readme",
   "dependencies": {
+    "chromedriver": "^2.35.0",
     "nodemailer": "^4.4.2",
     "selenium-webdriver": "^4.0.0-alpha.1"
   }

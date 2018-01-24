@@ -1,6 +1,7 @@
 var webdriver = require('selenium-webdriver');
+var chrome = require('selenium-webdriver/chrome')
 var nodemailer = require('nodemailer');
-var config = require('.config');
+var config = require('./.config');
 
 //helper function to find value from drop downs
 function findVal(options, selection) {
@@ -13,11 +14,15 @@ function findVal(options, selection) {
     return val;
 }
 
-//initialize the web driver brower
-var browser = new webdriver.Builder().usingServer().withCapabilities({'browserName': 'chrome' }).build();
+//initialize the web driver browser
+var browser = new webdriver.Builder()
+                           .withCapabilities(webdriver.Capabilities.chrome())
+                           .build();
 
 //navigate to parkspeedy.com
-browser.get("www.parkspeedy.com");
+browser.get("http://www.parkspeedy.com").then(()=> {
+  console.log("poop smear");
+})
 
 //find the #createNewPassButton
 //click

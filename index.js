@@ -1,6 +1,6 @@
 var webdriver = require('selenium-webdriver');
 var nodemailer = require('nodemailer');
-var password = require('.config');
+var config = require('.config');
 
 //helper function to find value from drop downs
 function findVal(options, selection) {
@@ -24,7 +24,7 @@ browser.get("www.parkspeedy.com");
 
 //wait for next page to load, then
   //find the property drop down #parkedAtCommunityDropDown
-  //find the option value for Trio
+  //find the option value for desired property
   //set the selected dropdown value with .val
   //trigger "change" event
 
@@ -41,10 +41,10 @@ browser.get("www.parkspeedy.com");
     //#licensePlatNumber
     //#termsAndConditionsAgreedSwitch
   //find values for drop downs with helper function, set and trigger change
-  //set license plate value to FVW 8207
+  //set license plate value to desired value
   //trigger terms&conditions switch with .bootstrapSwitch("toggleState")
   //click the #createPermitLink button
 
 //wait for the next page to load, then
   //use selenium to take a screenshot
-  //use nodemailer to send the screenshot to hbowen1123@gmail.com
+  //use nodemailer to send the screenshot to desired email

@@ -1,7 +1,7 @@
 # auto-park
 WebDriver script to automate registering for a parking space
 
-#Installation
+##Installation
 Clone the repo and run `npm install` to install dependencies.
 Create a .config file in the root directory. This file is gitignored as it will contain an email and password. Export the following constants (all strings):
   -email (the email to send the confirmation to)
@@ -13,5 +13,5 @@ Create a .config file in the root directory. This file is gitignored as it will 
   -carColor (color, title case here too (e.g. "Blue"))
   -licensePlateNumber (the plate number)
 
-#Use
+###Use
 From the terminal, run the command `node index.js` from the root of the director

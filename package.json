@@ -24,6 +24,7 @@
   "homepage": "https://github.com/HNBowen/auto-park#readme",
   "dependencies": {
     "chromedriver": "^2.35.0",
+    "jquery": "^3.3.1",
     "nodemailer": "^4.4.2",
     "selenium-webdriver": "^4.0.0-alpha.1"
   }

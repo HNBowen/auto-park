@@ -63,26 +63,47 @@ var browser = new webdriver.Builder()
 //   })
 // })
 
+//helper function to attach an array of scripts and the config to the browser window
+//for later execution 
+function attachScripts(config, scripts) {
+
+  browser.executeScript(function {
+    window.config = config;
+
+    scripts.forEach(function(script) {
+      var tag = document.createElement("script");
+      tag.innerHTML = script;
+      document.head.appendChild(tag);
+    })
+  }.call(null, config, ...scripts))
+}
+
 const run = async () => {
   await browser.get("http://www.parkspeedy.com");
   await browser.findElement(webdriver.By.id("createNewPassButton")).click();
 
-  await browser.executeScript(async (selectProperty, findVal, config) => {
-    window.config = config;
-    //append functions as scripts
-    var selectPropertyScript = document.createElement("script")
-    var findValScript = document.createElement("script")
+  await attachScripts(config, [findVal, selectProperty]);
 
-    selectPropertyScript.innerHTML = selectProperty;
-    findValScript.innerHTML = findVal;
+  //attach config, find val, and selectProperty to the browser so we can execute them later
+  // await browser.executeScript((selectProperty, findVal, config) => {
+  //   window.config = config;
+  //   //append functions as scripts
+  //   var selectPropertyScript = document.createElement("script")
+  //   var findValScript = document.createElement("script")
 
-    await document.head.appendChild(selectPropertyScript);
-    await document.head.appendChild(findValScript);
-  }, selectProperty, findVal, config)
+  //   selectPropertyScript.innerHTML = selectProperty;
+  //   findValScript.innerHTML = findVal;
 
+  //   document.head.appendChild(selectPropertyScript);
+  //   document.head.appendChild(findValScript);
+  // }, selectProperty, findVal, config)
+
+  //select property specified in config from the drop down
   await browser.executeScript(() => {
     selectProperty();
   })
+
+
 } 
 
 run();

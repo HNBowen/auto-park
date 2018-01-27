@@ -22,6 +22,7 @@ function findElementById(id) {
     return result[0];
   })
 }
+
 function selectProperty() {
   let $parkedAtCommunityDropDown = $("#parkedAtCommunityDropDown");
   let options = $parkedAtCommunityDropDown.find("option");
@@ -31,78 +32,86 @@ function selectProperty() {
   $parkedAtCommunityDropDown.trigger("change");
 }
 
-function sayHi() {
-  console.log("hi")
+function selectFromDropDown(selector, desiredValue) {
+  let $dropDown = $(selector);
+  let options = $dropDown.find("option");
+  let value = findVal(options, desiredValue);
+
+  $dropDown.val(value);
+  $dropDown.trigger("change");
 }
 
+//helper function to fill input fields
+function fillInput(selector, value) {
+  $(selector).val(value);
+}
 //initialize the web driver browser
 var browser = new webdriver.Builder()
                            .withCapabilities(webdriver.Capabilities.chrome())
                            .build();
 
-// //navigate to parkspeedy.com
-// browser.get("http://www.parkspeedy.com")
-// //find the #createNewPassButton and click
-// browser.wait(findElementById("createNewPassButton"), 100000).then(() => {
-//   browser.findElement(webdriver.By.id("createNewPassButton")).click();
-//   browser.wait(findElementById("parkedAtCommunityDropDown"), 100000000).then(() => {
-//     browser.executeScript(async (selectProperty, findVal, config) => {
-//       window.config = config;
-//       //append functions as scripts
-//       var selectPropertyScript = document.createElement("script")
-//       var findValScript = document.createElement("script")
-
-//       selectPropertyScript.innerHTML = selectProperty;
-//       findValScript.innerHTML = findVal;
-
-//       await document.head.appendChild(selectPropertyScript);
-//       await document.head.appendChild(findValScript);
-
-//       selectProperty();
-//     }, selectProperty, findVal, config)
-//   })
-// })
-
 //helper function to attach an array of scripts and the config to the browser window
 //for later execution 
-function attachScripts(config, scripts) {
+async function attachScripts(config, scripts) {
 
-  browser.executeScript(function {
+  scripts.forEach((script) => {
+    console.log("attaching script: ", script.name);
+  })
+  await browser.executeScript(function(config, scripts) {
+    console.log("attaching config: ", config);
+    console.log("attaching scripts: ", scripts)
     window.config = config;
 
-    scripts.forEach(function(script) {
+    for (var i = 0; i < scripts.length; i++) {
       var tag = document.createElement("script");
-      tag.innerHTML = script;
+      tag.innerHTML = scripts[i];
       document.head.appendChild(tag);
-    })
-  }.call(null, config, ...scripts))
+    }
+
+    console.log()
+  }, config, scripts)
 }
 
+
+
 const run = async () => {
+  //navigate to parkspeedy.com
   await browser.get("http://www.parkspeedy.com");
+  //find button and click
   await browser.findElement(webdriver.By.id("createNewPassButton")).click();
 
-  await attachScripts(config, [findVal, selectProperty]);
-
-  //attach config, find val, and selectProperty to the browser so we can execute them later
-  // await browser.executeScript((selectProperty, findVal, config) => {
-  //   window.config = config;
-  //   //append functions as scripts
-  //   var selectPropertyScript = document.createElement("script")
-  //   var findValScript = document.createElement("script")
-
-  //   selectPropertyScript.innerHTML = selectProperty;
-  //   findValScript.innerHTML = findVal;
-
-  //   document.head.appendChild(selectPropertyScript);
-  //   document.head.appendChild(findValScript);
-  // }, selectProperty, findVal, config)
-
-  //select property specified in config from the drop down
+  //attach scripts for selecting the property from the dropdown
+  await attachScripts(config, [findVal, selectFromDropDown]);
+  //select property
   await browser.executeScript(() => {
-    selectProperty();
+    selectFromDropDown("#parkedAtCommunityDropDown", config.property);
   })
 
+  //attach the fillInput script
+  await attachScripts(config, [fillInput]);
+
+  //fill out unit and phone number inputs
+  await browser.executeScript(() => {
+    fillInput("#guestVisitingUnitNumber", config.visitingUnitNumber)
+    fillInput("#guestVisitingUnitPhoneNumber", config.visitingPhoneNumber)
+  })
+
+  //click next button to proceed
+  await browser.findElement(webdriver.By.id("createPermitLinkStep1")).click();
+
+  //attach needed scripts again
+  await attachScripts(config, [fillInput, findVal, selectFromDropDown]);
+
+  //fill in values and agree to T's & C's
+  await browser.executeScript(() => {
+    selectFromDropDown("#vehicleMakeModelDropDown", config.carMake);
+    selectFromDropDown("#vehicleColorDropDown", config.carColor);
+    fillInput("#licensePlateNumber", config.licensePlateNumber);
+
+    //accept t's and c's
+    $("#termsAndConditionsAgreedSwitch").bootstrapSwitch("toggleState");
+    $("#createPermitLink").click();
+  })
 
 } 
 

@@ -1,9 +1,27 @@
 var webdriver = require('selenium-webdriver');
 var chrome = require('selenium-webdriver/chrome')
 var nodemailer = require('nodemailer');
+var fs = require('fs');
 var $ = require('jquery');
 
 var config = require('./.config');
+
+//set up nodemailer with gmail
+var transporter = nodemailer.createTransport({
+ service: 'gmail',
+ auth: {
+        user: config.email,
+        pass: config.password
+    }
+});
+
+//more nodemail set-up
+const emailConfirmation = {
+  from: config.email, // sender address
+  to: config.email, // list of receivers
+  subject: config.property + ' visitor parking pass', // Subject line
+  html: '<p>Attached is confirmation of your visitor parking permit.</p>'// plain text body
+};
 
 //helper function to find value from drop downs
 function findVal(options, selection) {
@@ -112,6 +130,23 @@ const run = async () => {
     $("#termsAndConditionsAgreedSwitch").bootstrapSwitch("toggleState");
     $("#createPermitLink").click();
   })
+
+  //take a screenshot and email to self
+  let screenshot = await browser.takeScreenshot();
+  let screenshotBase64 = screenshot.replace(/^data:image\/png;base64,/,"");
+  emailConfirmation.attachments = [{
+    filename: 'confirmation.png',
+    content: screenshotBase64,
+    encoding: 'base64'
+  }];
+  transporter.sendMail(emailConfirmation, (err, info) => {
+    if (err) {
+      console.log("ERROR SENDING MESSAGE: ", err)
+    } else {
+      console.log("MESSAGE SENT: ",info) 
+    }
+  })
+
 
 } 
 

@@ -142,8 +142,10 @@ const run = async () => {
   transporter.sendMail(emailConfirmation, (err, info) => {
     if (err) {
       console.log("ERROR SENDING MESSAGE: ", err)
+      browser.quit();
     } else {
-      console.log("MESSAGE SENT: ",info) 
+      console.log("MESSAGE SENT: ",info)
+      browser.quit(); 
     }
   })
 

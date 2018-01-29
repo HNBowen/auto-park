@@ -1,23 +1,24 @@
 var webdriver = require('selenium-webdriver');
 var chrome = require('selenium-webdriver/chrome')
 var nodemailer = require('nodemailer');
-var fs = require('fs');
+var mg = require('nodemailer-mailgun-transport');
 var $ = require('jquery');
 
 var config = require('./.config');
 
-//set up nodemailer with gmail
-var transporter = nodemailer.createTransport({
- service: 'gmail',
- auth: {
-        user: config.email,
-        pass: config.password
-    }
-});
+//configure the mailgun transporter for nodemailer
+var auth = {
+  auth: {
+    api_key: "key-f9608270c43a7b4c0dcf7b2a5ce77179",
+    domain: "autopark.mailgun.com"
+  }
+}
+
+var mailgun = nodemailer.createTransport(mg(auth));
 
 //more nodemail set-up
 const emailConfirmation = {
-  from: config.email, // sender address
+  from: 'system@autopark.mailgun.com', // sender address
   to: config.email, // list of receivers
   subject: config.property + ' visitor parking pass', // Subject line
   html: '<p>Attached is confirmation of your visitor parking permit.</p>'// plain text body
@@ -139,7 +140,7 @@ const run = async () => {
     content: screenshotBase64,
     encoding: 'base64'
   }];
-  transporter.sendMail(emailConfirmation, (err, info) => {
+  mailgun.sendMail(emailConfirmation, (err, info) => {
     if (err) {
       console.log("ERROR SENDING MESSAGE: ", err)
       browser.quit();
@@ -152,7 +153,13 @@ const run = async () => {
 
 } 
 
-run();
+try {
+  run();
+} catch(err) {
+  console.log("error running registration script")
+  console.log("error name: ", err.name);
+  console.log("error details: ", err.message);
+}
 
 
 //wait for next page to load, then

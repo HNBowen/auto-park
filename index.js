@@ -18,7 +18,7 @@ var mailgun = nodemailer.createTransport(mg(auth));
 
 //more nodemail set-up
 const emailConfirmation = {
-  from: 'system@autopark.mailgun.com', // sender address
+  from: 'park_bot@autopark.mailgun.com', // sender address
   to: config.email, // list of receivers
   subject: config.property + ' visitor parking pass', // Subject line
   html: '<p>Attached is confirmation of your visitor parking permit.</p>'// plain text body
@@ -159,6 +159,19 @@ try {
   console.log("error running registration script")
   console.log("error name: ", err.name);
   console.log("error details: ", err.message);
+
+  mailgun.sendMail({
+      from: 'park_bot@autopark.mailgun.com',
+      to: config.email,
+      subject: "Error report :(",
+      html: '<p> An error was encountered during the registration process: <br/> ' + err + '</p>'
+    },(error, info) => {
+      if (error) {
+        console.log("error sending error report, something must really be wrong: ", error)
+      } else {
+        console.log("error report sent: ", info)
+    }
+  })
 }
 
 

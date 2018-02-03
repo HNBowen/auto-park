@@ -9,7 +9,7 @@ var config = require('./.config');
 //configure the mailgun transporter for nodemailer
 var auth = {
   auth: {
-    api_key: "key-f9608270c43a7b4c0dcf7b2a5ce77179",
+    api_key: config.mailGunApiKey,
     domain: "autopark.mailgun.com"
   }
 }

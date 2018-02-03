@@ -65,9 +65,13 @@ function fillInput(selector, value) {
   $(selector).val(value);
 }
 //initialize the web driver browser
-var browser = new webdriver.Builder()
-                           .withCapabilities(webdriver.Capabilities.chrome())
-                           .build();
+var browser;
+
+const initBrowser = async function() {
+  var builder = new webdriver.Builder();
+  builder.withCapabilities(webdriver.Capabilities.chrome())
+  browser = await builder.build();
+}
 
 //helper function to attach an array of scripts and the config to the browser window
 //for later execution 
@@ -94,6 +98,8 @@ async function attachScripts(config, scripts) {
 
 
 const run = async () => {
+  //
+  await initBrowser();
   //navigate to parkspeedy.com
   await browser.get("http://www.parkspeedy.com");
   //find button and click

@@ -36,7 +36,8 @@ with Selenium on the Heroku slug:
 Configuring the browser driver for deployment requires a different approach than running 
 locally. Specifically, the path to the Chrome binary needs to be explicity set. The Chrome buildpack makes the Chrome binary path available as an environment variable:
 
-`const initBrowser = async function () {
+```javascript
+const initBrowser = async function () {
   //create a new builder object with new webdriver.Builder()
   var builder = new webdriver.Builder();
   //set the default to chrome
@@ -49,7 +50,8 @@ locally. Specifically, the path to the Chrome binary needs to be explicity set. 
   builder.setChromeOptions(chromeOptions);
   //create the driver with builder.build()
   browser = await builder.build();
-}`
+}
+```
 
 Because the script depends on a .config file that is not checked into version control, when you deploy to heroku you will need to remove .config from .gitignore. Rather than doing this on the master branch, it is advisable to create a dedicated heroku branch and make the modification there. This branch (e.g. `myheroku`) can then be deployed to Heroku like so:
 

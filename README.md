@@ -52,6 +52,10 @@ locally. Specifically, the path to the Chrome binary needs to be explicity set. 
   browser = await builder.build();
 }`
 
+Because the script depends on a .config file that is not checked into version control, when you deploy to heroku you will need to remove .config from .gitignore. Rather than doing this on the master branch, it is advisable to create a dedicated heroku branch and make the modification there. This branch (e.g. `myheroku`) can then be deployed to Heroku like so:
+
+`git push heroku myheroku:master`
+
 ## Automation (Heroku)
 
 We can use Heroku's custom clock process to automate the script's execution. In the Procfile in the root directory, we specify a worker process and a clock process. The worker process is of course index.js, while the clock process runs clock.js, a npm CronJob that runs the script every 12 hours at 9am and 9pm CST. 

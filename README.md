@@ -52,5 +52,14 @@ locally. Specifically, the path to the Chrome binary needs to be explicity set. 
   browser = await builder.build();
 }`
 
+## Automation (Heroku)
+
+We can use Heroku's custom clock process to automate the script's execution. In the Procfile in the root directory, we specify a worker process and a clock process. The worker process is of course index.js, while the clock process runs clock.js, a npm CronJob that runs the script every 12 hours at 9am and 9pm CST. 
+
+More information about setting up this automation step can be found here:
+  
+  - https://devcenter.heroku.com/articles/scheduled-jobs-custom-clock-processes (Heroku docs)
+  - https://blog.andyjiang.com/intermediate-cron-jobs-with-heroku (Short turotial for set up with npm CronJob by Andy Jiang.)
+
 
 

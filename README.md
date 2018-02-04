@@ -34,7 +34,7 @@ with Selenium on the Heroku slug:
     Selenium chromedriver buildpack 
 
 Configuring the browser driver for deployment requires a different approach than running 
-locally. Specifically, the path to the Chrome binary needs to be explicity set. The Chrome buildpack makes the Chrome binary path available as an environment variable:
+locally. Specifically, the path to the Chrome binary needs to be explicity set. The Chrome buildpack makes the Chrome binary path available as an environment variable `GOOGLE_CHROME_SHIM`:
 
 ```javascript
 const initBrowser = async function () {

@@ -4,20 +4,20 @@ WebDriver script to automate registering for a parking space.
 The script uses Selenium's WebDriver to drive a chrome browser. jQuery is used to fill in various fields and advance through the registration process. A screenshot of the parking pass 
 is taken at the end of registration, and email to the email specified in the .config file. 
 
-Nodemailer with a MailGun transport is used to send the confirmation email. 
+Nodemailer with a MailGun transport is used to send the confirmation email. Set up your own (free) MailGun service here: https://signup.mailgun.com/new/signup
 
 ## Installation
 Clone the repo and run `npm install` to install dependencies.
 Create a .config file in the root directory. This file is gitignored as it will contain an email and password. Export the following constants (all strings):
-  -email (the email to send the confirmation to)
-  -password (password for that email address)
-  -property (the name of the property where you will be parking. Title case is used (e.g. The Aparement Complex))
-  -visitingPhoneNumber (number of the person you are visiting)
-  -visitingUnitNumber (number of the unit you are visiting)
-  -carMake (make of your car, title case here too (e.g. "Honda"))
-  -carColor (color, title case here too (e.g. "Blue"))
-  -licensePlateNumber (the plate number)
-  -mailGunApiKey (api key for mailgun service)
+  - email (the email to send the confirmation to)
+  - password (password for that email address)
+  - property (the name of the property where you will be parking. Title case is used (e.g. The Aparement Complex))
+  - visitingPhoneNumber (number of the person you are visiting)
+  - visitingUnitNumber (number of the unit you are visiting)
+  - carMake (make of your car, title case here too (e.g. "Honda"))
+  - carColor (color, title case here too (e.g. "Blue"))
+  - licensePlateNumber (the plate number)
+  - mailGunApiKey (api key for a mailgun service)
 
 ## Use
 From the terminal, run the command `npm start` from the root of the directory. 

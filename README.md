@@ -8,9 +8,8 @@ Nodemailer with a MailGun transport is used to send the confirmation email. Set 
 
 ## Installation
 Clone the repo and run `npm install` to install dependencies.
-Create a .config file in the root directory. This file is gitignored as it will contain an email and password. Export the following constants (all strings):
+Create a `.config` file in the root directory. This file is gitignored as it will contain your email and the api key for MailGun. Export the following constants (all strings):
   - email (the email to send the confirmation to)
-  - password (password for that email address)
   - property (the name of the property where you will be parking. Title case is used (e.g. The Aparement Complex))
   - visitingPhoneNumber (number of the person you are visiting)
   - visitingUnitNumber (number of the unit you are visiting)
